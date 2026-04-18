@@ -137,7 +137,8 @@ User Input (Form or Chat)
 ## Screenshots
 
 ### Backend API — FastAPI Swagger UI
-![API Docs](screenshots/api_docs.png)
+<img width="1890" height="905" alt="api_docs png" src="https://github.com/user-attachments/assets/b60edb2b-ba99-4080-b440-7b893c8df46e" />
+
 
 > Frontend UI runs on `http://localhost:5173` after `npm install && npm run dev`
 > Backend tested and running successfully on `http://localhost:8000`

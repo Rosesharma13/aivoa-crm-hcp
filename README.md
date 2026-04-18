@@ -38,6 +38,8 @@ aivoa-crm/
 │   │   ├── suggest_followup.py
 │   │   └── analyze_sentiment.py
 │   └── models/database.py                 # MySQL models
+├── .gitignore
+└── LICENSE    
 └── README.md
 ```
 

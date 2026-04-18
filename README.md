@@ -38,7 +38,9 @@ aivoa-crm/
 │   │   ├── suggest_followup.py
 │   │   └── analyze_sentiment.py
 │   └── models/database.py                 # MySQL models
-├── .gitignore
+├── screenshots/
+│   └── api_docs.png 
+├──.gitignore
 └── LICENSE    
 └── README.md
 ```
@@ -131,3 +133,11 @@ User Input (Form or Chat)
         ↓
    Response → Frontend
 ```
+
+## Screenshots
+
+### Backend API — FastAPI Swagger UI
+![API Docs](screenshots/api_docs.png)
+
+> Frontend UI runs on `http://localhost:5173` after `npm install && npm run dev`
+> Backend tested and running successfully on `http://localhost:8000`

@@ -1,145 +1,255 @@
+# AIVOA AI-First CRM — HCP Module
 
-# AI-First CRM – HCP Module (AIVOA.AI Assignment)
+> A production-grade AI-first CRM system for pharmaceutical sales teams to manage Healthcare Professional (HCP) interactions using **LangGraph multi-agent architecture**, **Groq LLM**, **FastAPI**, and **React**.
 
-A production-grade AI-first CRM system with Healthcare Professional (HCP) interaction logging, powered by LangGraph + Groq LLM.
+---
 
-## Tech Stack
+## 🚀 Live Demo
 
-| Layer | Technology |
-|-------|-----------|
-| Frontend | React + Redux + Vite |
-| Backend | Python + FastAPI |
-| AI Agent | LangGraph |
-| LLM | Groq (gemma2-9b-it) |
-| Database | MySQL |
-| Font | Google Inter |
+> Local deployment (FastAPI + React + SQLite)
+> Backend: `http://localhost:8000` | Frontend: `http://localhost:5173`
 
-## Project Structure
+---
+
+## 📸 Screenshots
+
+### Structured Interaction Form + AI Assistant Panel
+![Form Success](screenshot/form-success.png)
+
+### AI Chat Interface
+![AI Chat](screenshot/chat-ui.png)
+
+### FastAPI Swagger UI — API Documentation
+![API Docs](screenshot/api_docs.png)
+
+### Logged Interaction Data
+![API Data](screenshot/api-data.png)
+
+---
+
+## 🧠 What This Project Does
+
+MIRA-style CRM built for **pharmaceutical field representatives** to:
+
+- Log detailed meetings with doctors (HCPs) via a **structured form** or **natural language chat**
+- Get **AI-generated follow-up suggestions** after every interaction
+- Analyze **HCP sentiment** (Positive / Neutral / Negative) from interaction notes
+- **Search HCPs** by name, specialty, or region
+- Edit and retrieve past interaction records
+
+---
+
+## ⚙️ Tech Stack
+
+| Layer | Technology | Purpose |
+|-------|-----------|---------|
+| Frontend | React + Redux + Vite | Interactive UI with state management |
+| Backend | Python + FastAPI | REST API with async support |
+| AI Agent | LangGraph | Multi-agent orchestration |
+| LLM | Groq (gemma2-9b-it) | Fast LLM inference for AI features |
+| Database | SQLite (dev) / MySQL (prod) | Persistent interaction storage |
+| Styling | CSS + Google Inter | Clean, professional UI |
+
+---
+
+## 🤖 LangGraph Agent — 5 AI Tools
+
+The LangGraph agent orchestrates all AI operations. It routes user input through a graph of tools, deciding which tool to invoke based on intent. It maintains conversation state, extracts entities from natural language, and generates intelligent follow-up suggestions.
+
+### Tool 1: `log_interaction`
+- Captures structured interaction data (HCP name, date, topics, outcomes)
+- Uses Groq LLM to extract entities from free-text chat input
+- Summarizes long conversation notes into concise records
+- Saves to database with auto-generated sentiment analysis
+
+### Tool 2: `edit_interaction`
+- Retrieves existing interaction by ID
+- Accepts partial updates via natural language ("change the sentiment to positive")
+- LLM parses edit intent and maps to database fields
+- Validates and saves updated record
+
+### Tool 3: `search_hcp`
+- Searches HCP database by name, specialty, or region
+- Returns matching HCPs with interaction history summary
+- Supports fuzzy matching for partial names
+
+### Tool 4: `suggest_followup`
+- Analyzes last interaction content using Groq LLM
+- Generates 2-3 actionable follow-up recommendations
+- Considers HCP sentiment, topics discussed, and time since last visit
+
+### Tool 5: `analyze_sentiment`
+- Uses Groq LLM to classify HCP sentiment from interaction notes
+- Returns: Positive / Neutral / Negative with confidence score
+- Helps field reps track HCP relationship health over time
+
+---
+
+## 📁 Project Structure
 
 ```
-aivoa-crm/
-├── frontend/          # React + Redux UI
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── LogInteractionScreen.jsx   # Main screen (form + chat)
-│   │   │   ├── InteractionForm.jsx        # Structured form
-│   │   │   └── ChatInterface.jsx          # Conversational AI chat
-│   │   ├── store/
-│   │   │   ├── store.js                   # Redux store
-│   │   │   └── interactionSlice.js        # Redux slice
-│   │   └── App.jsx
+aivoa-crm-hcp/
 ├── backend/
-│   ├── main.py                            # FastAPI app entry
-│   ├── routers/interactions.py            # API routes
-│   ├── agents/hcp_agent.py                # LangGraph agent
-│   ├── tools/                             # 5 LangGraph tools
+│   ├── main.py                        # FastAPI app entry + CORS
+│   ├── requirements.txt
+│   ├── routers/
+│   │   ├── interactions.py            # Interaction CRUD routes
+│   │   ├── chat.py                    # AI chat endpoint
+│   │   └── hcp.py                     # HCP search routes
+│   ├── agents/
+│   │   └── hcp_agent.py               # LangGraph agent
+│   ├── tools/
 │   │   ├── log_interaction.py
 │   │   ├── edit_interaction.py
 │   │   ├── search_hcp.py
 │   │   ├── suggest_followup.py
 │   │   └── analyze_sentiment.py
-│   └── models/database.py                 # MySQL models
-├── screenshots/
-│   └── api_docs.png 
-├──.gitignore
-└── LICENSE    
+│   └── models/
+│       └── database.py                # SQLAlchemy models
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── LogInteractionScreen.jsx
+│   │   │   ├── InteractionForm.jsx
+│   │   │   └── ChatInterface.jsx
+│   │   ├── store/
+│   │   │   ├── store.js
+│   │   │   └── interactionSlice.js
+│   │   ├── styles/
+│   │   │   └── global.css
+│   │   ├── App.jsx
+│   │   └── main.jsx
+│   ├── index.html
+│   ├── vite.config.js
+│   └── package.json
+├── screenshot/
+│   ├── form-success.png
+│   ├── chat-ui.png
+│   ├── api-data.png
+│   └── api_docs.png
+├── .gitignore
+├── LICENSE
 └── README.md
 ```
 
-## LangGraph Agent & 5 Tools
+---
 
-### Agent Role
-The LangGraph agent orchestrates HCP interaction management. It routes user input (form or chat) through a graph of tools, deciding which tool to invoke based on intent. It maintains conversation state, extracts entities from natural language, and generates intelligent follow-up suggestions.
+## 🏗️ Architecture Flow
 
-### Tool 1: Log Interaction
-- Captures structured interaction data (HCP name, date, topics, outcomes)
-- Uses Groq LLM to extract entities from free-text chat input
-- Summarizes long conversation notes into concise records
-- Saves to MySQL with sentiment analysis
+```
+User Input (Structured Form or AI Chat)
+              ↓
+       React + Redux Frontend
+              ↓
+        FastAPI Backend
+              ↓
+      LangGraph Agent ──→ Groq LLM (gemma2-9b-it)
+              ↓
+       Tool Selection:
+       ├── log_interaction    → SQLite / MySQL
+       ├── edit_interaction   → SQLite / MySQL
+       ├── search_hcp         → SQLite / MySQL
+       ├── suggest_followup   → Groq LLM
+       └── analyze_sentiment  → Groq LLM
+              ↓
+        JSON Response → Frontend
+```
 
-### Tool 2: Edit Interaction
-- Retrieves existing interaction by ID
-- Accepts partial updates via natural language ("change the sentiment to positive")
-- LLM parses edit intent and maps to DB fields
-- Validates and saves updated record
+---
 
-### Tool 3: Search HCP
-- Searches HCP database by name, specialty, or region
-- Returns matching HCPs with interaction history summary
-- Supports fuzzy matching for partial names
+## 🛠️ Setup Instructions
 
-### Tool 4: Suggest Follow-up
-- Analyzes last interaction content using Groq LLM
-- Generates 2-3 actionable follow-up recommendations
-- Considers HCP sentiment, topics discussed, and time since last visit
+### Prerequisites
+- Python 3.10+
+- Node.js 18+
+- Groq API Key (free at https://console.groq.com)
 
-### Tool 5: Analyze Sentiment
-- Uses Groq LLM to classify HCP sentiment from interaction notes
-- Returns: Positive / Neutral / Negative with confidence score
-- Helps field reps track HCP relationship health over time
+### 1. Clone the repository
+```bash
+git clone https://github.com/Rosesharma13/aivoa-crm-hcp.git
+cd aivoa-crm-hcp
+```
 
-## Setup Instructions
-
-### Backend
+### 2. Backend Setup
 ```bash
 cd backend
 pip install -r requirements.txt
-# Set environment variables:
-# GROQ_API_KEY=your_groq_api_key
-# DB_URL=mysql+aiomysql://user:password@localhost/crm_db
+```
+
+Set environment variable:
+```bash
+# Windows PowerShell
+$env:GROQ_API_KEY="your_groq_api_key_here"
+
+# Mac/Linux
+export GROQ_API_KEY="your_groq_api_key_here"
+```
+
+Run backend:
+```bash
 uvicorn main:app --reload --port 8000
 ```
 
-### Frontend
+### 3. Frontend Setup
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
 
-### Database
-```sql
-CREATE DATABASE crm_db;
--- Tables auto-created via SQLAlchemy on startup
-```
+### 4. Open in browser
+- Frontend: **http://localhost:5173**
+- API Docs: **http://localhost:8000/docs**
 
-## API Endpoints
+---
+
+## 📡 API Endpoints
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| POST | /interactions/ | Log new interaction |
-| GET | /interactions/{id} | Get interaction by ID |
-| PUT | /interactions/{id} | Edit interaction |
-| GET | /interactions/ | List all interactions |
-| POST | /chat/ | Chat with AI agent |
-| GET | /hcp/search?q= | Search HCPs |
+| `POST` | `/interactions/` | Log new HCP interaction |
+| `GET` | `/interactions/` | List all interactions |
+| `GET` | `/interactions/{id}` | Get interaction by ID |
+| `PUT` | `/interactions/{id}` | Edit interaction |
+| `POST` | `/chat/` | Chat with LangGraph AI agent |
+| `GET` | `/hcp/` | List all HCPs |
+| `GET` | `/hcp/search?q=` | Search HCPs by name/specialty |
 
-## Architecture Flow
+---
 
-```
-User Input (Form or Chat)
-        ↓
-   React Frontend
-        ↓
-   FastAPI Backend
-        ↓
-  LangGraph Agent ──→ Groq LLM (gemma2-9b-it)
-        ↓
-  Tool Selection:
-  ├── log_interaction → MySQL
-  ├── edit_interaction → MySQL
-  ├── search_hcp → MySQL
-  ├── suggest_followup → Groq LLM
-  └── analyze_sentiment → Groq LLM
-        ↓
-   Response → Frontend
-```
+## 🩺 Sample HCP Data (Auto-seeded)
 
-## Screenshots
+| Name | Specialty | Hospital | Region |
+|------|-----------|----------|--------|
+| Dr. Anjali Mehta | Oncology | AIIMS Delhi | North |
+| Dr. Rajesh Kumar | Cardiology | Fortis Mumbai | West |
+| Dr. Priya Nair | Neurology | Apollo Chennai | South |
+| Dr. Sameer Shah | Endocrinology | Medanta Gurgaon | North |
+| Dr. Kavita Rao | Pulmonology | Manipal Bangalore | South |
 
-### Backend API — FastAPI Swagger UI
-<img width="1890" height="905" alt="api_docs png" src="https://github.com/user-attachments/assets/b60edb2b-ba99-4080-b440-7b893c8df46e" />
+---
 
+## 🔑 Key Features
 
-> Frontend UI runs on `http://localhost:5173` after `npm install && npm run dev`
-> Backend tested and running successfully on `http://localhost:8000`
+- **Dual Input Modes** — Structured form or conversational AI chat
+- **LangGraph Multi-Agent** — 5 specialized tools orchestrated by an AI agent
+- **Real-time Sentiment Analysis** — Groq LLM classifies HCP mood from notes
+- **AI Follow-up Suggestions** — Auto-generated after every logged interaction
+- **HCP Search** — Find doctors by name, specialty, or region
+- **Full CRUD** — Create, read, update, delete interactions
+- **Redux State Management** — Predictable frontend state
+- **FastAPI + Async SQLAlchemy** — Production-ready async backend
+
+---
+
+## 👩‍💻 Built By
+
+**Rose Sharma** — AI/ML Engineer
+
+[![Portfolio](https://img.shields.io/badge/Portfolio-rosesharma13.github.io-ff2d78?style=flat-square)](https://rosesharma13.github.io)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-rose--sharma13-0077b5?style=flat-square&logo=linkedin)](https://linkedin.com/in/rose-sharma13)
+[![GitHub](https://img.shields.io/badge/GitHub-Rosesharma13-181717?style=flat-square&logo=github)](https://github.com/Rosesharma13)
+
+---
+
+> ⚠️ **Note:** Remove your API key before pushing to GitHub. Always use environment variables for secrets.

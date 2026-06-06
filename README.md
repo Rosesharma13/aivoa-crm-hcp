@@ -19,8 +19,6 @@
 ### AI Chat Interface
 ![AI Chat](screenshot/chat-ui.png)
 
-### FastAPI Swagger UI — API Documentation
-![API Docs](screenshot/api_docs.png)
 
 ### Logged Interaction Data
 ![API Data](screenshot/api-data.png)

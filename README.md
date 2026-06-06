@@ -112,18 +112,19 @@ aivoa-crm-hcp/
 │   │   │   └── ChatInterface.jsx
 │   │   ├── store/
 │   │   │   ├── store.js
+│   │   │   ├── chatSlice.js
 │   │   │   └── interactionSlice.js
 │   │   ├── styles/
 │   │   │   └── global.css
 │   │   ├── App.jsx
 │   │   └── main.jsx
 │   ├── index.html
+│   ├── package-lock.json
 │   ├── vite.config.js
 │   └── package.json
 ├── screenshot/
 │   ├── form-success.png
 │   ├── chat-ui.png
-│   ├── api-data.png
 │   └── api_docs.png
 ├── .gitignore
 ├── LICENSE

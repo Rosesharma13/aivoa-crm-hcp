@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-from models.database import get_db, Interaction
+from models.database import get_db, Interaction, HCP
 from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime
@@ -25,7 +25,24 @@ class InteractionUpdate(BaseModel):
 
 @router.post("/")
 async def create_interaction(data: InteractionCreate, db: AsyncSession = Depends(get_db)):
-    interaction = Interaction(**data.dict(), date=datetime.utcnow())
+    # Find hcp_id by name
+    result = await db.execute(select(HCP).where(HCP.name == data.hcp_name))
+    hcp = result.scalar_one_or_none()
+    hcp_id = hcp.id if hcp else 1
+
+    interaction = Interaction(
+        hcp_id=hcp_id,
+        hcp_name=data.hcp_name,
+        interaction_type=data.interaction_type,
+        topics_discussed=data.topics_discussed,
+        outcomes=data.outcomes,
+        sentiment=data.sentiment,
+        attendees=data.attendees,
+        materials_shared=data.materials_shared,
+        samples_distributed=data.samples_distributed,
+        follow_up_actions=data.follow_up_actions,
+        date=datetime.utcnow()
+    )
     db.add(interaction)
     await db.commit()
     await db.refresh(interaction)

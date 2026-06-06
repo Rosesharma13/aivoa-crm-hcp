@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-const API = 'http://localhost:8000';
+const API = '';
 
 export const logInteraction = createAsyncThunk('interaction/log', async (data) => {
   const res = await fetch(`${API}/interactions/`, {

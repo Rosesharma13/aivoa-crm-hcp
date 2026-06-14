@@ -247,7 +247,7 @@ npm run dev
 **Rose Sharma** — AI/ML Engineer
 
 [![Portfolio](https://img.shields.io/badge/Portfolio-rosesharma13.github.io-ff2d78?style=flat-square)](https://rosesharma13.github.io)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-rose--sharma13-0077b5?style=flat-square&logo=linkedin)](https://linkedin.com/in/rose-sharma13)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-rose-sharma13-0077b5?style=flat-square&logo=linkedin)](https://linkedin.com/in/rose-sharma13)
 [![GitHub](https://img.shields.io/badge/GitHub-Rosesharma13-181717?style=flat-square&logo=github)](https://github.com/Rosesharma13)
 
 ---

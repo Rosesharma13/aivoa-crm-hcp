@@ -8,7 +8,7 @@
 
 > Local deployment only (FastAPI + React + SQLite)
 > Backend: `http://localhost:8000` | Frontend: `http://localhost:5173`
--See setup instructions below to run locally.
+- See setup instructions below to run locally.
 
 ---
 

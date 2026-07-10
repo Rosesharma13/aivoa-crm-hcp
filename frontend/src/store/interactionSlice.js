@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-const API = '';
+const API = import.meta.env.VITE_API_URL || '';
 
 export const logInteraction = createAsyncThunk('interaction/log', async (data) => {
   const res = await fetch(`${API}/interactions/`, {

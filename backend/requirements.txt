@@ -3,7 +3,6 @@ uvicorn==0.29.0
 sqlalchemy==2.0.30
 aiosqlite==0.20.0
 pydantic==2.7.1
-pydantic-core==2.18.4
 python-dotenv==1.0.1
 langgraph==0.1.5
 langchain==0.2.1

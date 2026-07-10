@@ -19,35 +19,6 @@
 
 > A production-grade AI-first CRM system for pharmaceutical sales teams to manage Healthcare Professional (HCP) interactions using **LangGraph multi-agent architecture**, **Groq LLM**, **FastAPI**, and **React**.
 
----
-
-## 🚀 Live Demo
-
-> Local deployment only (FastAPI + React + SQLite)
-
-Backend: `http://localhost:8000`
-
-Frontend: `http://localhost:5173`
-
-See setup instructions below to run locally.
-
----
-
-## 📸 Screenshots
-
-### Structured Interaction Form + AI Assistant Panel
-
-![Form Success](screenshot/form-success.png)
-
-### AI Chat Interface
-
-![AI Chat](screenshot/chat-ui.png)
-
-### Logged Interaction Data
-
-![API Data](screenshot/api-data.png)
-
----
 
 ## 🧠 What This Project Does
 

@@ -33,11 +33,11 @@ AIVOA demonstrates a production-deployable multi-agent CRM architecture. Field r
 | `analyze_sentiment` | Classifies HCP interaction sentiment as Positive / Neutral / Negative with confidence score |
 
 ## Try These Prompts
-"Log a meeting with Dr. Anjali Mehta about OncoBoost Phase III — she was very positive and requested a follow-up brochure"
-"Search for cardiologists in Mumbai"
-"Get follow-up suggestions for interaction 1"
-"Analyze sentiment: The doctor seemed hesitant about prescribing, wanted more clinical data before committing"
-"Edit interaction 1 — change sentiment to Positive"
+- "Log a meeting with Dr. Anjali Mehta about OncoBoost Phase III — she was very positive and requested a follow-up brochure"
+- "Search for cardiologists in Mumbai"
+- "Get follow-up suggestions for interaction 1"
+- "Analyze sentiment: The doctor seemed hesitant about prescribing, wanted more clinical data before committing"
+- "Edit interaction 1 — change sentiment to Positive"
 
 ## Tech Stack
 

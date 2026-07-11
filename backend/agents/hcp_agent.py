@@ -45,6 +45,18 @@ async def log_interaction(
     Automatically generates AI follow-up suggestions based on interaction content.
     """
     async with AsyncSessionLocal() as session:
+        # Look up HCP by name to get their ID
+        hcp_result = await session.execute(
+            select(HCP).where(HCP.name.ilike(f"%{hcp_name}%"))
+        )
+        hcp = hcp_result.scalar_one_or_none()
+
+        if not hcp:
+            return json.dumps({
+                "status": "error",
+                "message": f"HCP '{hcp_name}' not found in database. Use search_hcp to find the correct name."
+            })
+
         # Use LLM to generate follow-up suggestions
         followup_prompt = f"""Based on this HCP interaction, suggest 3 specific follow-up actions:
 HCP: {hcp_name}
@@ -53,12 +65,13 @@ Outcomes: {outcomes}
 Sentiment: {sentiment}
 
 Return only a JSON list of 3 short action strings."""
-        
+
         followup_response = llm.invoke([HumanMessage(content=followup_prompt)])
         ai_followups = followup_response.content
 
         interaction = Interaction(
-            hcp_name=hcp_name,
+            hcp_id=hcp.id,
+            hcp_name=hcp.name,
             interaction_type=interaction_type,
             topics_discussed=topics_discussed,
             outcomes=outcomes,
@@ -76,11 +89,10 @@ Return only a JSON list of 3 short action strings."""
         return json.dumps({
             "status": "success",
             "interaction_id": interaction.id,
-            "hcp_name": hcp_name,
+            "hcp_name": hcp.name,
             "ai_suggested_followups": ai_followups,
-            "message": f"Interaction with {hcp_name} logged successfully."
+            "message": f"Interaction with {hcp.name} logged successfully."
         })
-
 
 # ─────────────────────────────────────────
 # TOOL 2: Edit Interaction
@@ -215,7 +227,7 @@ Return ONLY a JSON object: {{"suggestions": ["action1", "action2", "action3"]}}"
 @tool
 async def analyze_sentiment(text: str) -> str:
     """
-    Analyze HCP sentiment from interaction notes using Groq LLM (gemma2-9b-it).
+    Analyze HCP sentiment from interaction notes using Groq LLM (llama-3.3-70b-versatile).
     Classifies sentiment as Positive, Neutral, or Negative with a confidence score.
     Helps field reps track and monitor HCP relationship health over time.
     """

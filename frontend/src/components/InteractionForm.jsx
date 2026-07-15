@@ -196,8 +196,8 @@ const s = {
 
 export default function InteractionForm() {
   const dispatch = useDispatch();
-  const { form, hcps, submitStatus, aiSuggestions } = useSelector(s => s.interaction);
-
+  const { form, hcps, submitStatus, submitError, aiSuggestions } = useSelector(s => s.interaction);
+  
   const handleChange = (field) => (e) => dispatch(updateForm({ [field]: e.target.value }));
 
   const handleSubmit = () => {

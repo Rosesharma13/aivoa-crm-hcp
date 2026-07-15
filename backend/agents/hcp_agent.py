@@ -99,7 +99,7 @@ Return only a JSON list of 3 short action strings."""
 # ─────────────────────────────────────────
 @tool
 async def edit_interaction(
-    interaction_id: int,
+    interaction_id: str,
     field: str,
     new_value: str,
 ) -> str:
@@ -109,34 +109,39 @@ async def edit_interaction(
     Parses edit intent and updates the correct database field.
     Supported fields: topics_discussed, outcomes, sentiment, follow_up_actions, attendees, materials_shared.
     """
+    try:
+        interaction_id_int = int(interaction_id)
+    except (ValueError, TypeError):
+        return json.dumps({"status": "error", "message": f"Invalid interaction_id: '{interaction_id}'"})
+
     allowed_fields = {
         "topics_discussed", "outcomes", "sentiment",
         "follow_up_actions", "attendees", "materials_shared",
         "samples_distributed", "interaction_type"
     }
-    
+
     if field not in allowed_fields:
         return json.dumps({"status": "error", "message": f"Field '{field}' not editable. Allowed: {list(allowed_fields)}"})
 
     async with AsyncSessionLocal() as session:
         result = await session.execute(
-            select(Interaction).where(Interaction.id == interaction_id)
+            select(Interaction).where(Interaction.id == interaction_id_int)
         )
         interaction = result.scalar_one_or_none()
-        
+
         if not interaction:
-            return json.dumps({"status": "error", "message": f"Interaction {interaction_id} not found."})
+            return json.dumps({"status": "error", "message": f"Interaction {interaction_id_int} not found."})
 
         setattr(interaction, field, new_value)
         interaction.updated_at = datetime.utcnow()
         await session.commit()
-        
+
         return json.dumps({
             "status": "success",
-            "interaction_id": interaction_id,
+            "interaction_id": interaction_id_int,
             "updated_field": field,
             "new_value": new_value,
-            "message": f"Interaction {interaction_id} updated successfully."
+            "message": f"Interaction {interaction_id_int} updated successfully."
         })
 
 
@@ -185,20 +190,25 @@ async def search_hcp(query: str) -> str:
 # TOOL 4: Suggest Follow-up
 # ─────────────────────────────────────────
 @tool
-async def suggest_followup(interaction_id: int) -> str:
+async def suggest_followup(interaction_id: str) -> str:
     """
     Generate AI-powered follow-up recommendations for a past HCP interaction.
     Analyzes the interaction's topics, outcomes, and sentiment using Groq LLM.
     Returns 3 specific, actionable follow-up suggestions.
     """
+    try:
+        interaction_id_int = int(interaction_id)
+    except (ValueError, TypeError):
+        return json.dumps({"status": "error", "message": f"Invalid interaction_id: '{interaction_id}'"})
+
     async with AsyncSessionLocal() as session:
         result = await session.execute(
-            select(Interaction).where(Interaction.id == interaction_id)
+            select(Interaction).where(Interaction.id == interaction_id_int)
         )
         interaction = result.scalar_one_or_none()
-        
+
         if not interaction:
-            return json.dumps({"status": "error", "message": f"Interaction {interaction_id} not found."})
+            return json.dumps({"status": "error", "message": f"Interaction {interaction_id_int} not found."})
 
         prompt = f"""You are a life sciences sales coach. Based on this HCP interaction, provide 3 specific follow-up actions.
 
@@ -212,10 +222,10 @@ Current Follow-up: {interaction.follow_up_actions}
 Return ONLY a JSON object: {{"suggestions": ["action1", "action2", "action3"]}}"""
 
         response = llm.invoke([HumanMessage(content=prompt)])
-        
+
         return json.dumps({
             "status": "success",
-            "interaction_id": interaction_id,
+            "interaction_id": interaction_id_int,
             "hcp_name": interaction.hcp_name,
             "suggestions": response.content
         })

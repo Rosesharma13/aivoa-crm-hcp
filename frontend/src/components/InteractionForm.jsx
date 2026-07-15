@@ -201,7 +201,19 @@ export default function InteractionForm() {
   const handleChange = (field) => (e) => dispatch(updateForm({ [field]: e.target.value }));
 
   const handleSubmit = () => {
-    if (!form.hcp_name || !form.topics_discussed) return alert('Please fill in HCP name and topics discussed.');
+    if (!form.hcp_name) return alert('Please select an HCP.');
+    if (!form.interaction_type) return alert('Please select an interaction type.');
+    if (!form.date) return alert('Please select a date.');
+
+    const selectedDate = new Date(form.date);
+    const today = new Date();
+    today.setHours(23, 59, 59, 999);
+    if (selectedDate > today) return alert('Date cannot be in the future.');
+
+    if (!form.topics_discussed || form.topics_discussed.trim().length < 5) {
+      return alert('Please enter at least 5 characters describing the topics discussed.');
+    }
+
     dispatch(logInteraction(form));
   };
 
@@ -241,8 +253,9 @@ export default function InteractionForm() {
                 </select>
               </div>
               <div>
-                <label style={s.label}>Interaction Type</label>
+                <label style={s.label}>Interaction Type *</label>
                 <select style={s.select} value={form.interaction_type} onChange={handleChange('interaction_type')}>
+                  <option value="">Select type...</option>
                   {['Meeting', 'Call', 'Email', 'Conference', 'Virtual'].map(t => (
                     <option key={t}>{t}</option>
                   ))}
@@ -253,8 +266,8 @@ export default function InteractionForm() {
             {/* Row 2: Date + Attendees */}
             <div style={s.row}>
               <div>
-                <label style={s.label}>Date</label>
-                <input type="date" style={s.input} value={form.date} onChange={handleChange('date')} />
+                <label style={s.label}>Date *</label>
+                <input type="date" style={s.input} value={form.date} max={new Date().toISOString().split('T')[0]} onChange={handleChange('date')} />
               </div>
               <div>
                 <label style={s.label}>Attendees</label>

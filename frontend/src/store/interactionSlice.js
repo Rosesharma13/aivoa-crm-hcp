@@ -1,26 +1,31 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 const API = import.meta.env.VITE_API_URL || '';
 
-export const logInteraction = createAsyncThunk('interaction/log', async (data) => {
-  const res = await fetch(`${API}/interactions/`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
-  });
-  return res.json();
-});
+export const logInteraction = createAsyncThunk(
+  'interaction/log',
+  async (data, { rejectWithValue }) => {
+    const res = await fetch(`${API}/interactions/`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    const body = await res.json();
+    if (!res.ok) {
+      return rejectWithValue(body);
+    }
+    return body;
+  }
+);
 
 export const fetchInteractions = createAsyncThunk('interaction/fetchAll', async () => {
   const res = await fetch(`${API}/interactions/`);
   return res.json();
 });
-
 export const searchHCP = createAsyncThunk('interaction/searchHCP', async (query) => {
   const res = await fetch(`${API}/hcp/search?q=${encodeURIComponent(query)}`);
   return res.json();
 });
-
 export const fetchHCPs = createAsyncThunk('interaction/fetchHCPs', async () => {
   const res = await fetch(`${API}/hcp/`);
   return res.json();
@@ -31,7 +36,7 @@ const interactionSlice = createSlice({
   initialState: {
     form: {
       hcp_name: '',
-      interaction_type: 'Meeting',
+      interaction_type: '',
       date: new Date().toISOString().split('T')[0],
       attendees: '',
       topics_discussed: '',
@@ -46,6 +51,7 @@ const interactionSlice = createSlice({
     hcpSearchResults: [],
     status: 'idle',
     submitStatus: 'idle',
+    submitError: null,
     lastSaved: null,
     aiSuggestions: [],
   },
@@ -56,7 +62,7 @@ const interactionSlice = createSlice({
     resetForm: (state) => {
       state.form = {
         hcp_name: '',
-        interaction_type: 'Meeting',
+        interaction_type: '',
         date: new Date().toISOString().split('T')[0],
         attendees: '',
         topics_discussed: '',
@@ -67,6 +73,7 @@ const interactionSlice = createSlice({
         follow_up_actions: '',
       };
       state.submitStatus = 'idle';
+      state.submitError = null;
       state.aiSuggestions = [];
     },
     setAISuggestions: (state, action) => {
@@ -75,7 +82,10 @@ const interactionSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(logInteraction.pending, (state) => { state.submitStatus = 'loading'; })
+      .addCase(logInteraction.pending, (state) => {
+        state.submitStatus = 'loading';
+        state.submitError = null;
+      })
       .addCase(logInteraction.fulfilled, (state, action) => {
         state.submitStatus = 'success';
         state.lastSaved = action.payload;
@@ -85,7 +95,12 @@ const interactionSlice = createSlice({
           } catch { state.aiSuggestions = []; }
         }
       })
-      .addCase(logInteraction.rejected, (state) => { state.submitStatus = 'error'; })
+      .addCase(logInteraction.rejected, (state, action) => {
+        state.submitStatus = 'error';
+        state.submitError =
+          (action.payload && (action.payload.detail || JSON.stringify(action.payload))) ||
+          'Something went wrong. Please check your input and try again.';
+      })
       .addCase(fetchInteractions.fulfilled, (state, action) => { state.interactions = action.payload; })
       .addCase(fetchHCPs.fulfilled, (state, action) => { state.hcps = action.payload.hcps || []; })
       .addCase(searchHCP.fulfilled, (state, action) => { state.hcpSearchResults = action.payload.hcps || []; });

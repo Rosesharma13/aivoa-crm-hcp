@@ -335,7 +335,7 @@ export default function InteractionForm() {
         <div style={s.aiPanel}>
           <div style={s.aiHeader}>
             <div style={s.aiTitle}>🤖 AI Assistant</div>
-            <div style={s.aiSub}>Powered by Groq — gemma2-9b-it</div>
+            <div style={s.aiSub}>Powered by Groq — LLaMA 3.3 70B</div>
           </div>
 
           <div style={{ padding: '14px 16px' }}>

@@ -26,7 +26,7 @@ app.include_router(hcp.router, prefix="/hcp", tags=["HCP Search"])
 
 @app.get("/")
 async def root():
-    return {"message": "AIVOA AI-First CRM API Running"}
+    return {"message": "Quelvox AI-First CRM API Running"}
 
 @app.get("/health")
 async def health():

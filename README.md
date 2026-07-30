@@ -1,4 +1,4 @@
-# AIVOA AI-First CRM — HCP Module
+# Quelvox AI-First CRM — HCP Module
 
 [![Backend](https://img.shields.io/badge/backend-FastAPI-009688)](https://fastapi.tiangolo.com/)
 [![Frontend](https://img.shields.io/badge/frontend-React%20%2B%20Redux-61DAFB)](https://react.dev/)
@@ -30,7 +30,7 @@ The assignment specifies MySQL or PostgreSQL. This project uses **SQLite** via S
 
 ## Overview
 
-AIVOA demonstrates a production-deployable multi-agent CRM architecture. Field reps can either fill a structured form to log HCP interactions, or describe the interaction in plain English and let the LangGraph agent handle extraction, logging, sentiment analysis, and follow-up generation automatically.
+Quelvox demonstrates a production-deployable multi-agent CRM architecture. Field reps can either fill a structured form to log HCP interactions, or describe the interaction in plain English and let the LangGraph agent handle extraction, logging, sentiment analysis, and follow-up generation automatically.
 
 ## Agent Tools
 
@@ -68,7 +68,7 @@ AIVOA demonstrates a production-deployable multi-agent CRM architecture. Field r
 
 ## Project Structure
 ```
-aivoa-crm-hcp/
+Quelvox-CRM/
 ├── backend/
 │   ├── agents/
 │   │   └── hcp_agent.py       # LangGraph agent with 5 tools
@@ -154,4 +154,4 @@ MIT
 ## Author
 
 **Rose Sharma**  
-[GitHub](https://github.com/Rosesharma13) · [LinkedIn](https://linkedin.com/in/rose-sharma13) · [Portfolio](https://rosesharma13.github.io)
+[GitHub](https://github.com/Rosesharma13) · [LinkedIn](https://linkedin.com/in/rose-sharma13) 

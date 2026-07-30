@@ -146,7 +146,7 @@ export default function LogInteractionScreen() {
         <div style={styles.logo}>
           <div style={styles.logoIcon}>A</div>
           <div>
-            <div style={styles.logoText}>AIVOA.AI <span style={{ color: '#5f6368', fontWeight: 400 }}>CRM</span></div>
+            <div style={styles.logoText}>Quelvox <span style={{ color: '#5f6368', fontWeight: 400 }}>CRM</span></div>
           </div>
         </div>
         <div style={styles.headerRight}>

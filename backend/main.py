@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from routers import interactions, chat, hcp
 from models.database import init_db
 
-app = FastAPI(title="AIVOA AI-First CRM – HCP Module", version="1.0.0")
+app = FastAPI(title="Quelvox AI-First CRM – HCP Module", version="1.0.0")
 
 FRONTEND_ORIGIN = os.getenv("FRONTEND_ORIGIN", "*")
 

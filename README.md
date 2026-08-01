@@ -10,10 +10,7 @@
 
 An AI-first CRM system for pharmaceutical field representatives to manage Healthcare Professional (HCP) interactions via structured form or natural language chat.
 
-**Live App:** https://aivoa-crm-hcp-alpha.vercel.app  
-**Backend API:** https://aivoa-crm-hcp-jqq8.onrender.com  
-**API Docs:** https://aivoa-crm-hcp-jqq8.onrender.com/docs
-
+**Live App:** https://quelvox-crm.vercel.app  
 > **Note:** Backend runs on Render's free tier and spins down after inactivity. First request after idle may take 30–50 seconds.
 
 ---
